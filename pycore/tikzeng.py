@@ -310,6 +310,25 @@ def to_connection( of, to):
 \draw [connection]  ("""+of+"""-east)    -- node {\midarrow} ("""+to+"""-west);
 """
 
+def to_precise_dash(of, to, with_fill=False):
+    start_x = 0
+    start_y = 0
+    start_z = 0
+    if with_fill:
+        start_x = .3
+        start_y = .5
+        start_z = 1.2
+    return fr"""
+\draw [densely dashed]  
+    ({of}-nearnortheast)++({start_x}, {start_y}, {start_z}) coordinate(a) -- ({to}-nearnorthwest)
+    ({of}-nearsoutheast)++({start_x}, {start_y+1.75}, {start_z}) coordinate(b) -- ({to}-nearsouthwest)
+    ({of}-farsoutheast)++({start_x}, {start_y+1.75}, {start_z+1.25}) coordinate(c) -- ({to}-farsouthwest)
+    ({of}-farnortheast)++({start_x}, {start_y}, {start_z+1.25}) coordinate(d) -- ({to}-farnorthwest)
+    
+    (a)--(b)--(c)--(d)--(a)
+;
+"""
+
 def to_skip( of, to, pos_of=1.25, pos_to=1.25):
     return r"""
 \path ("""+ of +"""-southeast) -- ("""+ of +"""-northeast) coordinate[pos="""+ str(pos_of) +"""] ("""+ of +"""-top) ;
