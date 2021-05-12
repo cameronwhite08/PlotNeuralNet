@@ -20,16 +20,18 @@ def build_pic(add_fill=False):
     else:
         model.append(to_TConv("x_in", "", "", offset="(0,0,0)", to="(0,0,0)", height=12, depth=10, width=2))
 
-    model.append(to_XInput("filt", "", offset="(2,0,0)", to="(x_in-east)", height=2, depth=2, width=4))
-    model.append(to_TConv("conv1", "", "", offset="(2,0,0)", to="(x_in-east)", height=9, depth=7, width=4))
-    model.append(to_precise_dash('x_in', 'filt', with_fill=add_fill))
+    model.append(to_FC("filt_begin", "", offset="(-.3,.8,.3)", to="(x_in-west)", height=3, depth=3, width=2))
+
+    model.append(to_TConv("conv1", "", "", offset="(2,0,0)", to="(x_in-east)", height=6, depth=5, width=5))
+    model.append(to_FC("filt_end", "", offset="(0,.5,.42)", to="(conv1-west)", height=1, depth=1, width=5))
+    model.append(to_dash('filt_begin', 'filt_end'))
     model.append(to_end())
     return model
 
 
 def main():
     namefile = str(sys.argv[0]).split('.')[0]
-    arch = build_pic(add_fill=False)
+    arch = build_pic(add_fill=True)
     to_generate(arch, namefile + '.tex')
 
 
