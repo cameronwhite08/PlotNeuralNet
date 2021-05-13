@@ -1,0 +1,51 @@
+#!/bin/bash
+
+# Script name: $1
+# Max frames: $2
+# Num times frames repeat: $3
+
+
+# log all this scripts outputs
+logfile=create_imgs$$.log
+exec > $logfile 2>&1
+
+OUTPUT_PATH=./outputs/
+SCRIPT_NAME=$1
+MAX_FRAMES=$2
+FRAME_REPEAT=${3:-1}
+
+## make sure contents of working directory are clean
+rm -r $OUTPUT_PATH
+mkdir $OUTPUT_PATH
+
+# create out latex to be rendered
+python3 Convolution.py
+
+for i in $(seq 0 "$MAX_FRAMES")
+do
+  filename="$OUTPUT_PATH$SCRIPT_NAME-$i"
+  echo "$filename"
+
+  # render a pdf from the latex
+  pdflatex -output-directory $OUTPUT_PATH "$filename.tex"
+  # crop the pdf
+  pdfcrop "$filename.pdf"
+
+  # convert the cropped pdf to a png
+  pdftoppm -png -r 600 "$filename-crop.pdf" > "$filename.png"
+
+  # cleanup temp files
+  rm "$filename.aux"
+  rm "$filename.log"
+  rm "$filename.pdf"
+  rm "$filename-crop.pdf"
+  rm "$filename.tex"
+done
+
+# create a color palette needed to prevent artifacts in the video
+ffmpeg -y -i "$OUTPUT_PATH$SCRIPT_NAME-%01d.png" -vf palettegen "$OUTPUT_PATH"palette.png
+# create the output video
+ffmpeg -r "$FRAME_REPEAT" -y -i "$OUTPUT_PATH$SCRIPT_NAME-%01d.png" -i "$OUTPUT_PATH"palette.png -lavfi paletteuse "$SCRIPT_NAME.gif"
+
+## make sure contents of working directory are clean
+rm -r $OUTPUT_PATH

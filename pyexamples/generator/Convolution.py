@@ -1,11 +1,10 @@
 import sys
-
-sys.path.append('../')
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from pycore.tikzeng import *
 
-
 def build_pic(add_fill=False, x=0, y=0):
-    model = [to_head('.'),
+    model = [to_head('../..'),
              to_cor(),
              to_begin()]
 
@@ -34,10 +33,11 @@ def main():
     namefile = str(sys.argv[0]).split('.')[0].split('/')[-1]
 
     ind = 0
-    for x in range(5):
-        for y in range(6):
+    for y in range(6):
+        for x in range(5):
             arch = build_pic(add_fill=True, x=x, y=y)
-            to_generate(arch, f'./outputs/{namefile}-{ind}.tex')
+            filename = f'./outputs/{namefile}-{ind}'
+            to_generate(arch, f'{filename}.tex')
             ind += 1
 
 
