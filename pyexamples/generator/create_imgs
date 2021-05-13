@@ -4,15 +4,14 @@
 # Max frames: $2
 # Num times frames repeat: $3
 
-
-# log all this scripts outputs
-logfile=create_imgs$$.log
-exec > $logfile 2>&1
-
 OUTPUT_PATH=./outputs/
 SCRIPT_NAME=$1
 MAX_FRAMES=$2
 FRAME_REPEAT=${3:-1}
+
+# log all this scripts outputs
+logfile="$SCRIPT_NAME"_$$.log
+exec > "$logfile" 2>&1
 
 ## make sure contents of working directory are clean
 rm -r $OUTPUT_PATH
