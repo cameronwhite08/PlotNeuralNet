@@ -44,7 +44,12 @@ done
 # create a color palette needed to prevent artifacts in the video
 ffmpeg -y -i "$OUTPUT_PATH$SCRIPT_NAME-%01d.png" -vf palettegen "$OUTPUT_PATH"palette.png
 # create the output video
-ffmpeg -r "$FRAME_REPEAT" -y -i "$OUTPUT_PATH$SCRIPT_NAME-%01d.png" -i "$OUTPUT_PATH"palette.png -lavfi paletteuse "$SCRIPT_NAME.gif"
+ffmpeg -r "$FRAME_REPEAT" -y -i "$OUTPUT_PATH$SCRIPT_NAME-%01d.png" -i "$OUTPUT_PATH"palette.png "$OUTPUT_PATH$SCRIPT_NAME".mp4
+# convert to gif
+ffmpeg -i "$OUTPUT_PATH$SCRIPT_NAME".mp4 -i "$OUTPUT_PATH"palette.png -filter_complex "paletteuse" "$OUTPUT_PATH$SCRIPT_NAME".gif
+
+# optimize gif
+gifsicle -O3 "$OUTPUT_PATH$SCRIPT_NAME".gif -o "$SCRIPT_NAME".gif
 
 ## make sure contents of working directory are clean
 rm -r $OUTPUT_PATH
