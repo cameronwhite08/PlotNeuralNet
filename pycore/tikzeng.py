@@ -66,13 +66,14 @@ def to_Conv( name, s_filer=256, n_filer=64, offset="(0,0,0)", to="(0,0,0)", widt
     };
 """
 
-def to_TConv( name, s_filer=256, n_filer=64, offset="(0,0,0)", to="(0,0,0)", width=1, height=40, depth=40, caption=" " ):
+def to_TConv( name, s_filer=256, n_filer=64, y_filer=64, offset="(0,0,0)", to="(0,0,0)", width=1, height=40, depth=40, caption=" " ):
     return r"""
 \pic[shift={"""+ offset +"""}] at """+ to +""" 
     {Box={
         name=""" + name +""",
         caption="""+ caption +r""",
         xlabel={{"""+ str(n_filer) +""", }},
+        ylabel={{"""+ str(y_filer) +""", }},
         zlabel="""+ str(s_filer) +""",
         fill=\TConvColor,
         height="""+ str(height) +""",
@@ -206,14 +207,15 @@ def to_SoftMax( name, s_filer=10, offset="(0,0,0)", to="(0,0,0)", width=1.5, hei
 """
 
 # Fully Connected
-def to_XInput( name, s_filer=10, offset="(0,0,0)", to="(0,0,0)", width=1.5, height=3, depth=25, opacity=0.8, caption=" " ):
+def to_XInput( name, x_filer=10, y_filer=64, z_filer=64, offset="(0,0,0)", to="(0,0,0)", width=1.5, height=3, depth=25, opacity=0.8, caption=" " ):
     return r"""
 \pic[shift={"""+ offset +"""}] at """+ to +""" 
     {Box={
         name=""" + name +""",
         caption="""+ caption +""",
-        xlabel={{" ","dummy"}},
-        zlabel="""+ str(s_filer) +""",
+        xlabel={{"""+ str(x_filer) +""", }},
+        ylabel={{"""+ str(y_filer) +""", }},
+        zlabel="""+ str(z_filer) +""",
         fill=\XInput,
         opacity="""+ str(opacity) +""",
         height="""+ str(height) +""",
