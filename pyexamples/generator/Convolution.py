@@ -13,7 +13,7 @@ def build_pic(add_fill=False, x=0, y=0):
             to_XInput("fill_right", "3", "14", "12", offset="(0,0,0)", to="(0,0,0)", depth=12, width=2, height=14),
             to_TConv("x_in", "", "", "", offset="(0,0,0)", to="(fill_right-west)", height=12, depth=10, width=2),
             to_FC("filt_begin", "", offset=f"(-.3,.8-{.44*y},.1-{.45*x})", to="(x_in-west)", height=3, depth=3, width=2),
-            to_TConv("conv1", "6", "128", "7", offset="(2,0,0)", to="(x_in-east)", height=7, depth=6, width=5),
+            to_TConv("conv1", "5", "128", "6", offset="(2,0,0)", to="(x_in-east)", height=7, depth=6, width=5),
             to_FC("filt_end", "", offset=f"(0,.6-{.24 * y},.5-{.25 * x})", to="(conv1-west)", height=1, depth=1, width=5)
         ])
     else:
